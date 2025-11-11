@@ -1,172 +1,103 @@
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent } from '@/components/ui/card';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import Icon from '@/components/ui/icon';
 
-export default function Index() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: ''
-  });
+const Index = () => {
+  const [activeSection, setActiveSection] = useState('home');
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
+  const scrollToSection = (sectionId: string) => {
+    setActiveSection(sectionId);
+    const element = document.getElementById(sectionId);
+    element?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const services = [
-    {
-      title: 'Белые грибы',
-      description: 'Отборные сушеные белые грибы высшего качества',
-      icon: 'Leaf'
-    },
-    {
-      title: 'Лисички',
-      description: 'Ароматные лисички для изысканных блюд',
-      icon: 'Sparkles'
-    },
-    {
-      title: 'Шиитаке',
-      description: 'Премиальные грибы для здорового питания',
-      icon: 'Heart'
-    },
-    {
-      title: 'Ассорти',
-      description: 'Специально подобранные наборы грибов',
-      icon: 'Package'
-    }
-  ];
-
-  const reviews = [
-    {
-      name: 'Елена Петрова',
-      text: 'Отличное качество! Грибы ароматные, чистые, без мусора. Заказываю уже второй раз',
-      rating: 5
-    },
-    {
-      name: 'Михаил Сидоров',
-      text: 'Быстрая доставка, грибы упакованы аккуратно. Вкус и запах - как из леса!',
-      rating: 5
-    },
-    {
-      name: 'Анна Козлова',
-      text: 'Прекрасный продукт! Использую для супов и соусов. Рекомендую всем',
-      rating: 5
-    }
-  ];
-
   return (
-    <div className="min-h-screen">
-      <header className="fixed top-0 w-full bg-background/80 backdrop-blur-md z-50 border-b">
-        <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Icon name="Leaf" size={32} className="text-primary" />
-            <span className="text-2xl font-bold text-primary">ГрибоДар</span>
+    <div className="min-h-screen bg-gradient-to-br from-background via-muted to-secondary/20">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border shadow-sm">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Icon name="Mushroom" className="text-primary" size={32} />
+              <span className="text-2xl font-bold text-primary">ГрибДар</span>
+            </div>
+            <div className="hidden md:flex gap-8">
+              {[
+                { id: 'home', label: 'Главная' },
+                { id: 'about', label: 'О нас' },
+                { id: 'services', label: 'Услуги' },
+                { id: 'reviews', label: 'Отзывы' },
+                { id: 'contacts', label: 'Контакты' }
+              ].map(item => (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className={`text-lg font-medium transition-colors ${
+                    activeSection === item.id ? 'text-primary' : 'text-foreground hover:text-primary'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
           </div>
-          <div className="hidden md:flex gap-6">
-            <a href="#hero" className="hover:text-primary transition-colors">Главная</a>
-            <a href="#about" className="hover:text-primary transition-colors">О нас</a>
-            <a href="#services" className="hover:text-primary transition-colors">Каталог</a>
-            <a href="#reviews" className="hover:text-primary transition-colors">Отзывы</a>
-            <a href="#contact" className="hover:text-primary transition-colors">Контакты</a>
-          </div>
-          <Button className="hidden md:block">Заказать</Button>
-        </nav>
-      </header>
+        </div>
+      </nav>
 
-      <section id="hero" className="pt-24 pb-16 px-4">
+      <section id="home" className="pt-32 pb-20 px-6">
         <div className="container mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
-                Натуральные сушеные грибы
+            <div className="space-y-6">
+              <h1 className="text-5xl md:text-6xl font-bold text-foreground leading-tight">
+                Премиальные сушеные грибы от природы к вам
               </h1>
-              <p className="text-xl text-muted-foreground mb-8">
-                Премиальное качество из экологически чистых районов. Доставка по всей России
+              <p className="text-xl text-muted-foreground">
+                Натуральные лесные грибы высшего качества. Собраны вручную, высушены по традиционной технологии.
               </p>
               <div className="flex gap-4">
-                <Button size="lg" className="text-lg">
+                <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
                   <Icon name="ShoppingCart" size={20} className="mr-2" />
-                  Купить сейчас
+                  Заказать сейчас
                 </Button>
-                <Button size="lg" variant="outline" className="text-lg">
+                <Button size="lg" variant="outline" onClick={() => scrollToSection('about')}>
                   Узнать больше
                 </Button>
               </div>
             </div>
             <div className="relative">
               <img 
-                src="https://cdn.poehali.dev/projects/ccb437d9-e219-4e14-a771-35d716a761a8/files/ce328bcd-5e3b-4f54-adc9-60980db89785.jpg"
-                alt="Сушеные грибы"
-                className="rounded-2xl shadow-2xl"
+                src="https://cdn.poehali.dev/projects/ccb437d9-e219-4e14-a771-35d716a761a8/files/c7d32a9f-6693-42f2-9539-a7469b48e648.jpg" 
+                alt="Сушеные грибы" 
+                className="rounded-2xl shadow-2xl w-full"
               />
             </div>
           </div>
         </div>
       </section>
 
-      <section id="about" className="py-16 px-4 bg-muted/30">
+      <section id="about" className="py-20 px-6 bg-card/50">
         <div className="container mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <img 
-              src="https://cdn.poehali.dev/projects/ccb437d9-e219-4e14-a771-35d716a761a8/files/f2bc22fe-6876-47a9-9250-024e5bd956b5.jpg"
-              alt="О нас"
-              className="rounded-2xl shadow-lg"
-            />
-            <div>
-              <h2 className="text-4xl font-bold mb-6">О нашей компании</h2>
-              <p className="text-lg text-muted-foreground mb-4">
-                Мы занимаемся заготовкой и продажей сушеных грибов уже более 10 лет. 
-                Наша продукция собирается в экологически чистых лесах и проходит 
-                тщательный отбор.
-              </p>
-              <p className="text-lg text-muted-foreground mb-6">
-                Каждая партия грибов обрабатывается с соблюдением всех стандартов качества, 
-                сохраняя максимум полезных свойств и неповторимый лесной аромат.
-              </p>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">10+</div>
-                  <div className="text-sm text-muted-foreground">лет опыта</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">5000+</div>
-                  <div className="text-sm text-muted-foreground">клиентов</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">100%</div>
-                  <div className="text-sm text-muted-foreground">качество</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="services" className="py-16 px-4">
-        <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">Наш каталог</h2>
-            <p className="text-lg text-muted-foreground">
-              Широкий выбор сушеных грибов премиум качества
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">О нас</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Мы — семейное предприятие с многолетним опытом сбора и заготовки лесных грибов
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {services.map((service, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardContent className="p-6">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                    <Icon name={service.icon} size={24} className="text-primary" />
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { icon: 'Leaf', title: '100% натуральные', desc: 'Только дикорастущие грибы из экологически чистых лесов' },
+              { icon: 'Award', title: 'Высшее качество', desc: 'Каждый гриб проходит тщательный отбор и контроль' },
+              { icon: 'Heart', title: 'С любовью', desc: 'Традиционные методы сушки сохраняют аромат и пользу' }
+            ].map((item, i) => (
+              <Card key={i} className="border-2 hover:border-primary transition-all hover:shadow-lg">
+                <CardContent className="pt-8 pb-6 text-center">
+                  <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Icon name={item.icon as any} size={32} className="text-primary" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
-                  <p className="text-muted-foreground mb-4">{service.description}</p>
-                  <Button variant="outline" className="w-full">
-                    Подробнее
-                  </Button>
+                  <h3 className="text-2xl font-bold text-foreground mb-2">{item.title}</h3>
+                  <p className="text-muted-foreground">{item.desc}</p>
                 </CardContent>
               </Card>
             ))}
@@ -174,53 +105,66 @@ export default function Index() {
         </div>
       </section>
 
-      <section className="py-16 px-4 bg-primary/5">
+      <section id="services" className="py-20 px-6">
         <div className="container mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Наша продукция</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Широкий ассортимент сушеных грибов на любой вкус
+            </p>
+          </div>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Icon name="BadgeCheck" size={32} className="text-primary" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Натуральный продукт</h3>
-              <p className="text-muted-foreground">Без химии и консервантов</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Icon name="Truck" size={32} className="text-accent" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Быстрая доставка</h3>
-              <p className="text-muted-foreground">По всей России за 2-5 дней</p>
-            </div>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Icon name="Shield" size={32} className="text-secondary" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Гарантия качества</h3>
-              <p className="text-muted-foreground">Вернем деньги, если не понравится</p>
-            </div>
+            {[
+              { name: 'Белые грибы', price: '1200₽', weight: '100г', icon: 'Star' },
+              { name: 'Лисички', price: '800₽', weight: '100г', icon: 'Sparkles' },
+              { name: 'Подберёзовики', price: '600₽', weight: '100г', icon: 'TreeDeciduous' },
+              { name: 'Опята', price: '500₽', weight: '100г', icon: 'Trees' },
+              { name: 'Микс грибов', price: '900₽', weight: '150г', icon: 'Gift' },
+              { name: 'Грибной порошок', price: '400₽', weight: '50г', icon: 'Wheat' }
+            ].map((product, i) => (
+              <Card key={i} className="hover:shadow-xl transition-all border-2 hover:border-accent">
+                <CardContent className="pt-6 pb-6">
+                  <div className="bg-accent/10 w-16 h-16 rounded-full flex items-center justify-center mb-4">
+                    <Icon name={product.icon as any} size={32} className="text-accent" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-foreground mb-2">{product.name}</h3>
+                  <p className="text-muted-foreground mb-4">{product.weight}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-3xl font-bold text-primary">{product.price}</span>
+                    <Button className="bg-accent hover:bg-accent/90">
+                      <Icon name="ShoppingBag" size={18} />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
 
-      <section id="reviews" className="py-16 px-4">
+      <section id="reviews" className="py-20 px-6 bg-card/50">
         <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">Отзывы клиентов</h2>
-            <p className="text-lg text-muted-foreground">
-              Что говорят наши покупатели
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Отзывы клиентов</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Нам доверяют тысячи покупателей по всей стране
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {reviews.map((review, index) => (
-              <Card key={index}>
-                <CardContent className="p-6">
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { name: 'Елена М.', text: 'Потрясающее качество! Грибы ароматные, чистые. Суп получился как у бабушки в деревне. Буду заказывать ещё!', rating: 5 },
+              { name: 'Дмитрий К.', text: 'Заказываю уже третий раз. Белые грибы просто восхитительны. Доставка быстрая, упаковка надёжная.', rating: 5 },
+              { name: 'Анна П.', text: 'Открыла для себя грибной порошок — просто находка для кулинарии! Добавляю в соусы и супы. Рекомендую!', rating: 5 }
+            ].map((review, i) => (
+              <Card key={i} className="border-2">
+                <CardContent className="pt-6 pb-6">
                   <div className="flex gap-1 mb-4">
                     {[...Array(review.rating)].map((_, i) => (
                       <Icon key={i} name="Star" size={20} className="text-accent fill-accent" />
                     ))}
                   </div>
-                  <p className="text-muted-foreground mb-4">{review.text}</p>
-                  <p className="font-semibold">{review.name}</p>
+                  <p className="text-muted-foreground mb-4 italic">"{review.text}"</p>
+                  <p className="font-bold text-foreground">{review.name}</p>
                 </CardContent>
               </Card>
             ))}
@@ -228,114 +172,73 @@ export default function Index() {
         </div>
       </section>
 
-      <section id="contact" className="py-16 px-4 bg-gradient-to-br from-primary/10 via-accent/10 to-secondary/10">
-        <div className="container mx-auto max-w-2xl">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">Свяжитесь с нами</h2>
-            <p className="text-lg text-muted-foreground">
-              Оставьте заявку, и мы свяжемся с вами в течение часа
+      <section id="contacts" className="py-20 px-6">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Свяжитесь с нами</h2>
+            <p className="text-xl text-muted-foreground">
+              Оставьте заявку и мы свяжемся с вами в ближайшее время
             </p>
           </div>
-          <Card>
-            <CardContent className="p-8">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <Input 
-                    placeholder="Ваше имя"
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    required
-                  />
+          <Card className="border-2">
+            <CardContent className="pt-8 pb-8">
+              <form className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="text-foreground font-medium mb-2 block">Ваше имя</label>
+                    <Input placeholder="Иван Иванов" className="bg-background" />
+                  </div>
+                  <div>
+                    <label className="text-foreground font-medium mb-2 block">Телефон</label>
+                    <Input placeholder="+7 (999) 123-45-67" className="bg-background" />
+                  </div>
                 </div>
                 <div>
-                  <Input 
-                    type="email"
-                    placeholder="Email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    required
-                  />
+                  <label className="text-foreground font-medium mb-2 block">Email</label>
+                  <Input type="email" placeholder="ivan@example.com" className="bg-background" />
                 </div>
                 <div>
-                  <Input 
-                    type="tel"
-                    placeholder="Телефон"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                    required
-                  />
+                  <label className="text-foreground font-medium mb-2 block">Сообщение</label>
+                  <Textarea placeholder="Расскажите, что вас интересует..." rows={5} className="bg-background" />
                 </div>
-                <div>
-                  <Textarea 
-                    placeholder="Ваше сообщение"
-                    value={formData.message}
-                    onChange={(e) => setFormData({...formData, message: e.target.value})}
-                    rows={4}
-                  />
-                </div>
-                <Button type="submit" size="lg" className="w-full">
+                <Button size="lg" className="w-full bg-primary hover:bg-primary/90">
+                  <Icon name="Send" size={20} className="mr-2" />
                   Отправить заявку
                 </Button>
               </form>
+              <div className="mt-8 pt-8 border-t grid md:grid-cols-3 gap-6 text-center">
+                <div>
+                  <Icon name="Phone" size={24} className="text-primary mx-auto mb-2" />
+                  <p className="text-sm text-muted-foreground">Телефон</p>
+                  <p className="text-foreground font-medium">+7 (999) 123-45-67</p>
+                </div>
+                <div>
+                  <Icon name="Mail" size={24} className="text-primary mx-auto mb-2" />
+                  <p className="text-sm text-muted-foreground">Email</p>
+                  <p className="text-foreground font-medium">info@gribdar.ru</p>
+                </div>
+                <div>
+                  <Icon name="MapPin" size={24} className="text-primary mx-auto mb-2" />
+                  <p className="text-sm text-muted-foreground">Адрес</p>
+                  <p className="text-foreground font-medium">Московская обл.</p>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
       </section>
 
-      <footer className="bg-card border-t py-12 px-4">
-        <div className="container mx-auto">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Icon name="Leaf" size={28} className="text-primary" />
-                <span className="text-xl font-bold">ГрибоДар</span>
-              </div>
-              <p className="text-muted-foreground">
-                Натуральные сушеные грибы премиум качества
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Навигация</h4>
-              <div className="space-y-2">
-                <a href="#hero" className="block text-muted-foreground hover:text-primary">Главная</a>
-                <a href="#about" className="block text-muted-foreground hover:text-primary">О нас</a>
-                <a href="#services" className="block text-muted-foreground hover:text-primary">Каталог</a>
-                <a href="#reviews" className="block text-muted-foreground hover:text-primary">Отзывы</a>
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Контакты</h4>
-              <div className="space-y-2 text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <Icon name="Phone" size={16} />
-                  <span>+7 (800) 123-45-67</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Icon name="Mail" size={16} />
-                  <span>info@gribodar.ru</span>
-                </div>
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Мы в соцсетях</h4>
-              <div className="flex gap-4">
-                <Button variant="outline" size="icon">
-                  <Icon name="MessageCircle" size={20} />
-                </Button>
-                <Button variant="outline" size="icon">
-                  <Icon name="Send" size={20} />
-                </Button>
-                <Button variant="outline" size="icon">
-                  <Icon name="Instagram" size={20} />
-                </Button>
-              </div>
-            </div>
+      <footer className="bg-foreground/5 py-8 px-6 border-t">
+        <div className="container mx-auto text-center">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <Icon name="Mushroom" className="text-primary" size={28} />
+            <span className="text-2xl font-bold text-primary">ГрибДар</span>
           </div>
-          <div className="mt-8 pt-8 border-t text-center text-muted-foreground">
-            <p>© 2024 ГрибоДар. Все права защищены</p>
-          </div>
+          <p className="text-muted-foreground">© 2024 ГрибДар. Все права защищены.</p>
         </div>
       </footer>
     </div>
   );
-}
+};
+
+export default Index;
